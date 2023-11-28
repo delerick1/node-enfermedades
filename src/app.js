@@ -20,10 +20,8 @@ app.use('/api/v1',geneticDiseases);
 // Definition of functions
 
 //4 4. poner a escuchar el servidor pot 
-app.listen(3000, () => {
-    console.log(" Server running on port: " + 3000)
 
-} ) 
 //servidor local -> direccion ip de loopback
 //121.0.0.1 -> localhost
 //http://localhost:3000/
+module.exports = app;

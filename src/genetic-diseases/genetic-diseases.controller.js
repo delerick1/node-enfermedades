@@ -1,59 +1,108 @@
+const GeneticDiseasesServices = require("./genetic-diseases.services")
 
-const findAll = (req, res ) =>{ 
-    const{ requestTime } = req;
+//definicion de funciones
+exports.findAll = async(req, res) => {
+  try {
+    const { requestTime } = req;
+  
+    const geneticDiseases = await GeneticDiseasesServices.findAll()
+
     return res.status(200).json({
-    message: ' method get - finAll',
-    requestTime
-})
+      requestTime,
+      geneticDiseases
+    })
+  } catch (error) {
+    return res.status(500).json({
+      status: 'fail',
+      message: 'Something went very wrong!',
+      error
+    })
+  }
 }
 
-const create = (req, res ) =>{ 
-    const{ requestTime } = req;
+exports.create = async(req, res) => {
+  const { requestTime } = req;
+  const { name, description, mortalityRate, treatment, symptoms } = req.body;
 
-    const disease = req.body;
-    return res.status(201).json({
-    message: ' method post - create',
-    data: diseases,
-    requestTime
-})
+  const geneticDiseases = await GeneticDiseasesServices.create({ 
+    name, 
+    description, 
+    mortalityRate, 
+    treatment, 
+    symptoms 
+  })
+
+  return res.status(201).json({
+    requestTime,
+    data: geneticDiseases
+  })
 }
 
-const foundOne = (req, res ) =>{ 
-    const{ requestTime } = req;
+exports.findOne = async (req, res) => {
+  const { requestTime } = req;
+  const { id } = req.params;
 
-    const disease = req.params;
+  const geneticDisease = await GeneticDiseasesServices.findOne(id)
+
+  if(!geneticDisease){
+    return res.status(404).json({
+      status: 'error',
+      message: `Genetic Disease with id: ${ id } not found`
+    })
+  }
+
+  return res.status(200).json({
+    requestTime,
+    geneticDisease
+  })
+}
+
+exports.update = async(req, res) => {
+  try {
+    const { requestTime } = req;
+    const { id } = req.params;
+    const { name, description } = req.body;
+
+    const geneticDisease = await GeneticDiseasesServices.findOne(id)
+
+    if(!geneticDisease){
+      return res.status(404).json({
+        status: 'error',
+        message: `Genetic Disease with id: ${ id } not found`
+      })
+    }
+
+    const geneticDiseaseUpdated = await GeneticDiseasesServices.update(geneticDisease, {
+      name,
+      description
+    })
+
     return res.status(200).json({
-    message:'method - get- foundone',
-    id: req.params.id,
-    requestTime
-})
+      requestTime,
+      geneticDiseaseUpdated
+    })
+  } catch (error) {
+    return res.status(500).json({
+      status: 'fail',
+      message: 'Something went very wrong!',
+      error
+    })
+  }
 }
 
-const update = (req, res ) =>{ 
-    const{ requestTime } = req;
+exports.deleteGeneticDiseases = async(req, res) => {
+  const { id } = req.params;
 
-    const {id} = req.params;
-    return res.status(200).json({
-    message:'method - patch- update',
-    id,
-    requestTime
-})
+  const geneticDisease = await GeneticDiseasesServices.findOne(id)
+
+  if(!geneticDisease){
+    return res.status(404).json({
+      status: 'error',
+      message: `Genetic Disease with id: ${ id } not found`
+    })
+  }
+
+  await GeneticDiseasesServices.delete(geneticDisease)
+
+  return res.status(204).json(null)
 }
-const deleteGeneric = (req, res ) =>{ 
-    const{ requestTime } = req;
-
-    const {id} = req.params;
-    return res.status(200).json({
-    message:'method - delete- delete',
-    id,
-    requestTime
-})
-}
-module.exports = {
-    foundOne,
-    create,
-    update,
-    deleteGeneric,
-    findAll
-
-};

@@ -1,9 +1,23 @@
 const express = require('express');
+
+
+//const {findAll,update, foundOne,create,deleteGeneric} =require ('./genetic-diseases.controller')
+//3. define endpoint
+const geneticController = require('./genetic-diseases.controller')
+
 const router = express.Router();
 
-const {findAll,update, foundOne,create,deleteGeneric} =require ('./genetic-diseases.controller')
-//3. define endpoint
-router.get('/genetic-diseases', findAll)
+
+
+router.get('/genetic-diseases', geneticController.findAll)
+
+router.post('/genetic-diseases', geneticController.create)
+
+router.get('/genetic-diseases/:id', geneticController.findOne)
+
+router.patch('/genetic-diseases/:id', geneticController.update)
+
+router.delete('/genetic-diseases/:id', geneticController.deleteGeneticDiseases)
 
 //app.get('/api/v1/genetic-diseases', (req, res) =>{
   //  return res.status(200).json([
@@ -11,7 +25,6 @@ router.get('/genetic-diseases', findAll)
       //      enfermedad:'method get'
         //}])
 //})
-router.post('/genetic-diseases', create)
 
 //app.post('/api/v1/genetic-diseases', (req, res) =>{
   //  console.log(req.body)
@@ -22,7 +35,6 @@ router.post('/genetic-diseases', create)
         //}
    // )
 //})
-router.post('/genetic-diseases/:id', foundOne)
 
 //app.get('/api/v1/genetic-diseases/:id', (req, res) =>{
   // console.log(req.params)
@@ -35,7 +47,6 @@ router.post('/genetic-diseases/:id', foundOne)
    // )
 //})
 
-router.patch('/genetic-diseases/:id', update)
 //app.patch('/api/v1/genetic-diseases/:id', (req, res) =>{
    // const {id} = req.params;
   //  return res.status(200).json(
@@ -46,7 +57,6 @@ router.patch('/genetic-diseases/:id', update)
       //  }
    // )
 //})
-router.delete('/genetic-diseases/:id', deleteGeneric)
 //app.delete('/api/v1/genetic-diseases/:id', (req, res) =>{
   //  const {id} = req.params;
    // return res.status(200).json(
